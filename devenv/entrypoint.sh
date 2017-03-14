@@ -29,6 +29,7 @@ DEV_DIR="${DEV_DIR:-}"
 ROOTFS_DIR=${ROOTFS_DIR:-"/rootfs/wheezy-armel"}
 TARGET_ARCH=${TARGET_ARCH:-armel}
 INSTALL_DEPS=${INSTALL_DEPS:-no}
+ADDITIONAL_REPOS=${ADDITIONAL_REPOS:-}
 
 export WORKSPACE_DIR="/home/$DEV_USER/wbdev"
 export GOPATH="$WORKSPACE_DIR"/go
@@ -128,6 +129,13 @@ case "$cmd" in
         fi
         ;;
     ndeb)
+        if [ -n "$ADDITIONAL_REPOS" ]; then
+            for repo in $ADDITIONAL_REPOS; do
+              echo "deb [arch=amd64] $repo wheezy main" >> /etc/apt/sources.list.d/additional.list
+            done
+            apt-get update
+            apt-get --force-yes -y upgrade
+        fi
         if [ "$INSTALL_DEPS" = "yes" ]; then
             apt-get update
             mk-build-deps -ir -t "apt-get --force-yes -y"
@@ -145,6 +153,13 @@ case "$cmd" in
         esac
         ;;
     hmake)
+        if [ -n "$ADDITIONAL_REPOS" ]; then
+            for repo in $ADDITIONAL_REPOS; do
+              echo "deb [arch=amd64] $repo wheezy main" >> /etc/apt/sources.list.d/additional.list
+            done
+            apt-get update
+            apt-get --force-yes -y upgrade
+        fi
         if [ "$INSTALL_DEPS" = "yes" ]; then
             apt-get update
             mk-build-deps -ir -t "apt-get --force-yes -y"
@@ -158,6 +173,13 @@ case "$cmd" in
         chu "$@"
         ;;
     make)
+        if [ -n "$ADDITIONAL_REPOS" ]; then
+            for repo in $ADDITIONAL_REPOS; do
+              echo "deb $repo wheezy main" >> $ROOTFS_DIR/etc/apt/sources.list.d/additional.list
+            done
+            chr apt-get update
+            chr apt-get --force-yes -y upgrade
+        fi
         if [ "$INSTALL_DEPS" = "yes" ]; then
             chr apt-get update
             chr mk-build-deps -ir -t "apt-get --force-yes -y"
@@ -165,6 +187,13 @@ case "$cmd" in
         chu make "$@"
         ;;
     cdeb)
+        if [ -n "$ADDITIONAL_REPOS" ]; then
+            for repo in $ADDITIONAL_REPOS; do
+              echo "deb $repo wheezy main" >> $ROOTFS_DIR/etc/apt/sources.list.d/additional.list
+            done
+            chr apt-get update
+            chr apt-get --force-yes -y upgrade
+        fi
         if [ "$INSTALL_DEPS" = "yes" ]; then
             chr apt-get update
             chr mk-build-deps -ir -t "apt-get --force-yes -y"

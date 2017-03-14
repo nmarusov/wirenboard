@@ -33,6 +33,7 @@ IMAGE=${WBDEV_IMAGE:-contactless/devenv}
 PREFIX="$HOME/wbdev/go/src/github.com/contactless"
 
 INSTALL_DEPS=${WBDEV_INSTALL_DEPS:-no}
+ADDITIONAL_REPOS=${WBDEV_ADDITIONAL_REPOS:-}
 
 docker run $DOCKER_TTY_OPTS --privileged --rm \
        -e DEV_UID=$UID \
@@ -42,6 +43,7 @@ docker run $DOCKER_TTY_OPTS --privileged --rm \
        -e ROOTFS_DIR="$ROOTFS_DIR" \
        -e TARGET_ARCH="$TARGET_ARCH" \
        -e INSTALL_DEPS="$INSTALL_DEPS" \
+       -e ADDITIONAL_REPOS="$ADDITIONAL_REPOS" \
        -v $HOME:$HOME \
        -v ${PWD%/*}:$PREFIX \
        $ssh_opts \
