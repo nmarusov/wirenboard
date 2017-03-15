@@ -169,7 +169,7 @@ case "$cmd" in
             chr apt-get update
             chr mk-build-deps -ir -t "apt-get --force-yes -y"
         fi
-        chu dpkg-buildpackage -us -uc "$@"
+        chu dpkg-buildpackage -b -us -uc "$@"
         ;;
     chroot)
         chr "$@"
