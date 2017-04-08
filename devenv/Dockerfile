@@ -18,8 +18,8 @@ RUN echo "deb [arch=amd64] http://releases.contactless.ru/ wheezy main" > /etc/a
     dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y git mercurial curl wget debootstrap \
-      build-essential pkg-config pkg-config:armel pkg-config:armhf debhelper npm \
-      nodejs-legacy bash-completion nano gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf sudo locales \
+      build-essential pkg-config pkg-config:armel pkg-config:armhf debhelper \
+      bash-completion nano gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf sudo locales \
       devscripts python-virtualenv git equivs \
       libmosquittopp-dev libmosquitto-dev pkg-config gcc-4.9 g++-4.9 libmodbus-dev \
       libcurl4-gnutls-dev libsqlite3-dev libjsoncpp-dev \
@@ -29,6 +29,10 @@ RUN echo "deb [arch=amd64] http://releases.contactless.ru/ wheezy main" > /etc/a
       aptly python-setuptools python3-setuptools liblog4cpp5-dev libpng12-dev libqt4-dev bc lzop bison flex && \
     apt-get install -y --force-yes proot
 # FIXME: we should not install anything with --force-yes
+
+RUN curl -L https://www.npmjs.com/install.sh | sh &&
+    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - &&
+    sudo apt-get install -y nodejs
 
 # Go environment
 # from https://github.com/docker-library/golang/blob/master/1.5/Dockerfile
@@ -87,4 +91,4 @@ RUN (cd /usr/src/gmock && cmake . && make && mv libg* /usr/lib/)
 
 COPY wbdev_profile.sh /etc/profile.d/wbdev_profile.sh
 
-RUN npm install -g bower grunt-cli
+RUN npm install -g webpack webpack-core
